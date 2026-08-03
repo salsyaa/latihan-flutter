@@ -1,6 +1,26 @@
 import 'package:flutter/material.dart';
 
 void main() {
+  String namaBarang = "Buku Tulis";
+  int hargaAnggota = 4500;
+  int hargaUmum = 5000;
+  int jumlahStok = 100;
+  bool tersedia = true;
+
+  // Tambahan sesuai soal
+  int jumlah = 3;
+  int totalAnggota = jumlah * hargaAnggota;
+  int totalUmum = jumlah * hargaUmum;
+  int selisih = totalUmum - totalAnggota;
+
+  print("===== KARTU DATA BARANG =====");
+  print("Nama Barang   : $namaBarang");
+  print("Harga Anggota : Rp$hargaAnggota");
+  print("Harga Umum    : Rp$hargaUmum");
+  print("Jumlah Stok   : $jumlahStok");
+  print("Tersedia      : $tersedia");
+  print("Total (anggota) $jumlah pcs : Rp$totalAnggota");
+  print("Selisih vs umum : Rp$selisih");
   runApp(const MyApp());
 }
 
@@ -120,3 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+// Mengapa pemilihan tipe data pada program ini penting bagi keakuratan kasir koperasi?
+// Pemilihan tipe data yang tepat seperti integer pada harga dan stok memastikan transaksi dapat dihitung secara akurat tanpa eror operasi matematika.
+// Selain itu, penggunaan tipe data yang pas mencegah kesalahan input data (seperti teks pada stok) dan menjaga konsistensi nilai saat menghitung total belanja serta selisih harga.
