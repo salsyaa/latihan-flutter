@@ -1,29 +1,93 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  // === 1. DATA BARANG (Dari Kode Awal) ===
   String namaBarang = "Buku Tulis";
   int hargaAnggota = 4500;
   int hargaUmum = 5000;
   int jumlahStok = 100;
   bool tersedia = true;
 
-  // Tambahan sesuai soal
-  int jumlah = 3;
-  int totalAnggota = jumlah * hargaAnggota;
-  int totalUmum = jumlah * hargaUmum;
-  int selisih = totalUmum - totalAnggota;
+  // --- Tambahan variabel Kategori ---
+  String kategori = "atk"; // Opsi: "atk", "makanan", "minuman", atau lainnya
+  String lokasiRak;
 
+  /*
+   * PENJELASAN MENGAPA SWITCH LEBIH RAPI DARIPADA BANYAK IF:
+   * 1. Keterbacaan (Readability): Switch-case dirancang khusus untuk membandingkan 
+   *    SATU variabel (kategori) dengan BANYAK nilai konstan secara langsung.
+   * 2. Bebas Redundansi: Tidak perlu mengulang penulisan kondisi (seperti: if (kategori == ...) 
+   *    else if (kategori == ...)) yang membuat kode terlihat menumpuk dan kotor.
+   * 3. Struktur Bersih: Pemisahan tiap cabang/kondisi terlihat sangat terstruktur 
+   *    dengan label 'case' dan penanganan kondisi tidak terduga lewat 'default'.
+   */
+  switch (kategori.toLowerCase()) {
+    case "atk":
+      lokasiRak = "Rak 1";
+      break;
+    case "makanan":
+      lokasiRak = "Rak 2";
+      break;
+    case "minuman":
+      lokasiRak = "Rak 3";
+      break;
+    default:
+      lokasiRak = "Rak lain";
+  }
+
+  // Cetak Informasi Barang
   print("===== KARTU DATA BARANG =====");
   print("Nama Barang   : $namaBarang");
+  print("Kategori      : $kategori");
+  print("Lokasi        : $lokasiRak");
   print("Harga Anggota : Rp$hargaAnggota");
   print("Harga Umum    : Rp$hargaUmum");
   print("Jumlah Stok   : $jumlahStok");
   print("Tersedia      : $tersedia");
-  print("Total (anggota) $jumlah pcs : Rp$totalAnggota");
-  print("Selisih vs umum : Rp$selisih");
+  print("=============================\n");
+
+  // === 2. TRANSAKSI KASIR ===
+  bool isAnggota = true;
+  int jumlahBeli = 30;
+
+  // Step A: Tentukan harga dasar (if/else)
+  int hargaSatuan;
+  if (isAnggota) {
+    hargaSatuan = hargaAnggota;
+  } else {
+    hargaSatuan = hargaUmum;
+  }
+
+  int totalBelanjaAwal = jumlahBeli * hargaSatuan;
+
+  // Step B: Potongan borongan (if bertingkat)
+  double persenPotongan = 0.0;
+
+  if (totalBelanjaAwal > 200000) {
+    persenPotongan = 0.10;
+  } else if (totalBelanjaAwal > 100000) {
+    persenPotongan = 0.05;
+  } else {
+    persenPotongan = 0.0;
+  }
+
+  double nominalPotongan = totalBelanjaAwal * persenPotongan;
+  double hargaAkhir = totalBelanjaAwal - nominalPotongan;
+
+  // Cetak Struk
+  print("===== STRUK TRANSAKSI =====");
+  print("Status Pembeli   : ${isAnggota ? "Anggota Koperasi" : "Umum"}");
+  print("Jumlah Beli      : $jumlahBeli pcs");
+  print("Harga Satuan     : Rp$hargaSatuan");
+  print("Total Awal       : Rp$totalBelanjaAwal");
+  print("Diskon Borongan  : ${(persenPotongan * 100).toInt()}% (-Rp${nominalPotongan.toInt()})");
+  print("---------------------------");
+  print("HARGA AKHIR      : Rp${hargaAkhir.toInt()}");
+  print("===========================");
+
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -141,5 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 // Mengapa pemilihan tipe data pada program ini penting bagi keakuratan kasir koperasi?
-// Pemilihan tipe data yang tepat seperti integer pada harga dan stok memastikan transaksi dapat dihitung secara akurat tanpa eror operasi matematika.
-// Selain itu, penggunaan tipe data yang pas mencegah kesalahan input data (seperti teks pada stok) dan menjaga konsistensi nilai saat menghitung total belanja serta selisih harga.
+// Pemilihan tipe data yang tepat seperti integer pada harga dan stok memastikan transaksi
+// dapat dihitung secara akurat tanpa eror operasi matematika.
+// Selain itu, penggunaan tipe data yang pas mencegah kesalahan input data (seperti teks pada stok) dan menjaga 
+//konsistensi nilai saat menghitung total belanja serta selisih harga.
