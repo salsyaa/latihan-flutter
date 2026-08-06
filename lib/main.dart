@@ -1,92 +1,50 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  // === 1. DATA BARANG (Dari Kode Awal) ===
-  String namaBarang = "Buku Tulis";
-  int hargaAnggota = 4500;
-  int hargaUmum = 5000;
-  int jumlahStok = 100;
-  bool tersedia = true;
+void main() async{
+// ==========================================
+  // BAGIAN 1: Menampilkan Daftar Barang & Harga
+  // ==========================================
+  
+  // 1. Deklarasi List Nama Barang & List Harga
+  List<String> daftarBarang = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
+  List<int> daftarHarga = [3000, 2500, 1500, 5000];
 
-  // --- Tambahan variabel Kategori ---
-  String kategori = "atk"; // Opsi: "atk", "makanan", "minuman", atau lainnya
-  String lokasiRak;
+  // Format angka ke format Rupiah
+  final rupiah = NumberFormat('#,###', 'id_ID');
 
-  /*
-   * PENJELASAN MENGAPA SWITCH LEBIH RAPI DARIPADA BANYAK IF:
-   * 1. Keterbacaan (Readability): Switch-case dirancang khusus untuk membandingkan 
-   *    SATU variabel (kategori) dengan BANYAK nilai konstan secara langsung.
-   * 2. Bebas Redundansi: Tidak perlu mengulang penulisan kondisi (seperti: if (kategori == ...) 
-   *    else if (kategori == ...)) yang membuat kode terlihat menumpuk dan kotor.
-   * 3. Struktur Bersih: Pemisahan tiap cabang/kondisi terlihat sangat terstruktur 
-   *    dengan label 'case' dan penanganan kondisi tidak terduga lewat 'default'.
-   */
-  switch (kategori.toLowerCase()) {
-    case "atk":
-      lokasiRak = "Rak 1";
-      break;
-    case "makanan":
-      lokasiRak = "Rak 2";
-      break;
-    case "minuman":
-      lokasiRak = "Rak 3";
-      break;
-    default:
-      lokasiRak = "Rak lain";
+  print("=== DAFTAR BARANG ===");
+
+  // 2. Perulangan FOR untuk menampilkan tiap baris beserta nomor
+  for (int i = 0; i < daftarBarang.length; i++) {
+    int nomor = i + 1;
+    String nama = daftarBarang[i];
+    String hargaFormatted = rupiah.format(daftarHarga[i]);
+
+    print("$nomor. $nama - Rp. $hargaFormatted");
   }
 
-  // Cetak Informasi Barang
-  print("===== KARTU DATA BARANG =====");
-  print("Nama Barang   : $namaBarang");
-  print("Kategori      : $kategori");
-  print("Lokasi        : $lokasiRak");
-  print("Harga Anggota : Rp$hargaAnggota");
-  print("Harga Umum    : Rp$hargaUmum");
-  print("Jumlah Stok   : $jumlahStok");
-  print("Tersedia      : $tersedia");
-  print("=============================\n");
+  print(""); // Baris kosong sebagai pemisah
 
-  // === 2. TRANSAKSI KASIR ===
-  bool isAnggota = true;
-  int jumlahBeli = 30;
+  // ==========================================
+  // BAGIAN 2: Simulasi Penjualan & Pelacak Waktu
+  // ==========================================
 
-  // Step A: Tentukan harga dasar (if/else)
-  int hargaSatuan;
-  if (isAnggota) {
-    hargaSatuan = hargaAnggota;
-  } else {
-    hargaSatuan = hargaUmum;
-  }
+  // 1. Deklarasi variabel stok awal
+  int stok = 3;
 
-  int totalBelanjaAwal = jumlahBeli * hargaSatuan;
+  print("--- Penjualan Buku Tulis ---");
 
-  // Step B: Potongan borongan (if bertingkat)
-  double persenPotongan = 0.0;
+  // 2. Perulangan WHILE selama stok masih ada (> 0)
+  while (stok > 0) {
+    stok--; // Stok berkurang 1 setiap penjualan
+    print("Terjual 1, sisa stok: $stok");
 
-  if (totalBelanjaAwal > 200000) {
-    persenPotongan = 0.10;
-  } else if (totalBelanjaAwal > 100000) {
-    persenPotongan = 0.05;
-  } else {
-    persenPotongan = 0.0;
-  }
-
-  double nominalPotongan = totalBelanjaAwal * persenPotongan;
-  double hargaAkhir = totalBelanjaAwal - nominalPotongan;
-
-  // Cetak Struk
-  print("===== STRUK TRANSAKSI =====");
-  print("Status Pembeli   : ${isAnggota ? "Anggota Koperasi" : "Umum"}");
-  print("Jumlah Beli      : $jumlahBeli pcs");
-  print("Harga Satuan     : Rp$hargaSatuan");
-  print("Total Awal       : Rp$totalBelanjaAwal");
-  print("Diskon Borongan  : ${(persenPotongan * 100).toInt()}% (-Rp${nominalPotongan.toInt()})");
-  print("---------------------------");
-  print("HARGA AKHIR      : Rp${hargaAkhir.toInt()}");
-  print("===========================");
+    // Pelacak Waktu: Memberikan jeda 1 detik per transaksi
+    await Future.delayed(Duration(seconds: 1));
 
   runApp(const MyApp());
+  }
 }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
